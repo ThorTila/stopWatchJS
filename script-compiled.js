@@ -19,38 +19,33 @@ var Stopwatch = function (_React$Component) {
                 _this.setState({
                     running: true
                 });
-                _this.watch = setInterval(function () {
-                    return _this.step();
-                }, 10); //zrobione
             } else {
                 _this.reset();
                 _this.setState({
                     running: true
                 });
-                _this.watch = setInterval(function () {
-                    return _this.step();
-                }, 10);
             }
-            /* startButton.className += ' running';  */ // to do!!!
+            _this.watch = setInterval(function () {
+                return _this.calculate();
+            }, 10);
         };
 
         _this.pause = function () {
             _this.setState({
                 running: false
-            }); //zrobione
+            });
             clearInterval(_this.watch);
-            /* startButton.classList.remove('running'); */ //to do!!!
         };
 
         _this.resetButton = function () {
             _this.reset();
-            _this.clearList(); //zrobione
+            _this.clearList(); //todo!!!!
         };
 
         _this.reset = function () {
             if (_this.state.running) _this.pause();
             _this.setState({
-                times: { //zrobione
+                times: {
                     minutes: 0,
                     seconds: 0,
                     miliseconds: 0
@@ -58,24 +53,16 @@ var Stopwatch = function (_React$Component) {
             });
         };
 
-        _this.step = function () {
-            if (!_this.state.running) return; //zrobione
-            _this.calculate();
-        };
-
         _this.calculate = function () {
             var _this$state$times = _this.state.times,
                 minutes = _this$state$times.minutes,
                 seconds = _this$state$times.seconds,
                 miliseconds = _this$state$times.miliseconds;
-            /* this.minutes = this.state.times.minutes;
-            this.seconds = this.state.times.seconds;
-            this.miliseconds = this.state.times.miliseconds; */
 
             miliseconds += 1;
             if (miliseconds >= 100) {
                 seconds += 1;
-                miliseconds = 0; //zrobione
+                miliseconds = 0;
             }
             if (seconds >= 60) {
                 minutes += 1;
@@ -83,9 +70,9 @@ var Stopwatch = function (_React$Component) {
             }
             _this.setState({
                 times: {
-                    miliseconds: miliseconds,
+                    minutes: minutes,
                     seconds: seconds,
-                    minutes: minutes
+                    miliseconds: miliseconds
                 }
             });
         };
@@ -102,7 +89,7 @@ var Stopwatch = function (_React$Component) {
                         { className: 'controls' },
                         React.createElement(
                             'a',
-                            { href: '#', className: 'button', onClick: _this.start.bind(_this) },
+                            { href: '#', className: 'button ' + (_this.state.running ? 'running' : null), onClick: _this.start.bind(_this) },
                             'Start'
                         ),
                         React.createElement(
@@ -136,11 +123,17 @@ var Stopwatch = function (_React$Component) {
         };
 
         _this.printList = function () {
+            /* 
+            this.setState ({
+            loop: + 1
+            });
+            this.loop++;
+            return <li>{this.loop}. {this.format(this.state.times)}</li>    */ //todo!!!
             var listEl = document.createElement('li'),
                 list = '';
             listEl.textContent = _this.loop + '. ' + _this.format(_this.times);
             list += listEl;
-            _this.loop++;
+            _this.state.loop++;
             return list;
         };
 
@@ -148,8 +141,8 @@ var Stopwatch = function (_React$Component) {
             var list = document.getElementsByTagName('li');
             while (list[0]) {
                 list[0].parentNode.removeChild(list[0]);
-            } //zrobione
-            _this.loop = 1;
+            } //todo!!!
+            _this.loop = 0;
         };
 
         _this.format = function (times) {
@@ -157,7 +150,7 @@ var Stopwatch = function (_React$Component) {
         };
 
         _this.pad0 = function (value) {
-            var result = value.toString(); //zrobione
+            var result = value.toString();
             if (result.length < 2) {
                 result = '0' + result;
             }
@@ -166,16 +159,13 @@ var Stopwatch = function (_React$Component) {
 
         _this.state = {
             running: false,
-            loop: 1,
+            loop: 0,
             times: {
                 minutes: 0,
                 seconds: 0,
                 miliseconds: 0
             }
         };
-        _this.miliseconds;
-        _this.seconds;
-        _this.minutes;
         return _this;
     }
 

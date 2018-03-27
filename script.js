@@ -3,67 +3,53 @@ class Stopwatch extends React.Component {
         super();
         this.state = {
             running: false,
-            loop: 1,
+            loop: 0,
             times: {
                 minutes: 0,
                 seconds: 0,
                 miliseconds: 0
             }
         };
-        this.miliseconds;
-        this.seconds;
-        this.minutes;
     }
     start = () => {
         if (!this.state.running) {
             this.setState({
                 running: true
             });
-            this.watch = setInterval(() => this.step(), 10);        //zrobione
         } else {
             this.reset();
             this.setState ({
                 running: true
             });
-            this.watch = setInterval(() => this.step(), 10);
         }
-        /* startButton.className += ' running';  */            // to do!!!
+        this.watch = setInterval(() => this.calculate(), 10);
     }
     pause = () => {
         this.setState ({
             running: false
-        });                     //zrobione
+        });
         clearInterval(this.watch);
-        /* startButton.classList.remove('running'); */         //to do!!!
     }
     resetButton = () => {
         this.reset();
-        this.clearList();                           //zrobione
+        this.clearList();               //todo!!!!
     }
     reset = () => {
         if (this.state.running) this.pause();
         this.setState ({
-            times: {                                //zrobione
+            times: {
             minutes: 0,
             seconds: 0,
             miliseconds: 0
             }
         });
     }
-    step = () => {
-        if (!this.state.running) return;                //zrobione
-        this.calculate();
-    }
-
     calculate = () => {
         let {minutes, seconds, miliseconds} = this.state.times;
-        /* this.minutes = this.state.times.minutes;
-        this.seconds = this.state.times.seconds;
-        this.miliseconds = this.state.times.miliseconds; */
         miliseconds += 1;
         if (miliseconds >= 100) {
             seconds += 1;
-            miliseconds = 0;               //zrobione
+            miliseconds = 0;
         }
         if (seconds >= 60) {
             minutes += 1;
@@ -71,9 +57,9 @@ class Stopwatch extends React.Component {
         }
         this.setState ({
             times: {
-                miliseconds,
+                minutes,
                 seconds,
-                minutes
+                miliseconds
             }
         });
     }
@@ -82,7 +68,7 @@ class Stopwatch extends React.Component {
             <div className='main'>
                 <div className='timer'>
                     <nav className='controls'>
-                        <a href='#' className='button' onClick={this.start.bind(this)}>Start</a>
+                        <a href='#' className={'button ' + (this.state.running ? 'running': null)} onClick={this.start.bind(this)}>Start</a>
                         <a href='#' className='button' onClick={this.pause.bind(this)}>Pause</a>
                         <a href='#' className='button' onClick={this.resetButton.bind(this)}>Reset</a>
                     </nav>
@@ -95,24 +81,29 @@ class Stopwatch extends React.Component {
             </div>
         );
     }
-    printList = () => {
+    printList = () => {/* 
+        this.setState ({
+            loop: + 1
+        });
+        this.loop++;
+        return <li>{this.loop}. {this.format(this.state.times)}</li>    */             //todo!!!
         let listEl = document.createElement('li'), 
             list = '';
         listEl.textContent = this.loop + '. ' + this.format(this.times);
         list += listEl;
-        this.loop++;
+        this.state.loop++;
         return list;
     }
     clearList = () => {
         let list = document.getElementsByTagName('li');
-        while (list[0]) list[0].parentNode.removeChild(list[0]);            //zrobione
-        this.loop = 1;
+        while (list[0]) list[0].parentNode.removeChild(list[0]);                //todo!!!
+        this.loop = 0;
     }
     format = (times) => {
         return `${this.pad0(times.minutes)}:${this.pad0(times.seconds)}:${this.pad0(Math.floor(times.miliseconds))}`;
     }
     pad0 = (value) => {
-        let result = value.toString();                              //zrobione
+        let result = value.toString();
         if (result.length < 2) {
             result = '0' + result;
         }
