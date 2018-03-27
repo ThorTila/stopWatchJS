@@ -3,18 +3,24 @@
     <head>
         <meta charset="UTF-8" />
         <title>Timer!</title>
-        <link rel="stylesheet" type="text/css" href="styles.css">
+        <link rel="stylesheet" type="text/css" href="./css/style.css">
     </head>
     <body>
-        <nav class="controls">
-            <a href="#" class="button" id="start">Start</a>
-            <a href="#" class="button" id="pause">Pause</a>
-            <a href="#" class="button" id="reset">Reset</a>
-        </nav>
-        <div class="stopwatch"></div>
-        <ul class="results">
-            <h2>Times list</h2>
-        </ul>
+        <div class="main">
+            <div class="timer">
+                <nav class="controls">
+                    <a href="#" class="button" id="start">Start</a>
+                    <a href="#" class="button" id="pause">Pause</a>
+                    <a href="#" class="button" id="reset">Reset</a>
+                </nav>
+                <div class="stopwatch"></div>
+            </div>
+            <div class="results">
+                <h2>Times list</h2>
+                <ul class="results-list">
+                </ul>
+                </div>
+        </div>
         <script type="text/javascript" src="script-compiled.js"></script>
     </body>
 </html>

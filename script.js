@@ -17,10 +17,12 @@ class Stopwatch {
             this.running = true;
             this.watch = setInterval(() => this.step(), 10);
         }
+        startButton.className += ' running';
     }
     pause() {
         this.running = false;
         clearInterval(this.watch);
+        startButton.classList.remove('running');
     }
     resetButton() {
         this.reset();
@@ -78,7 +80,7 @@ function pad0(value) {
     return result;
 }
 
-const stopwatch = new Stopwatch(document.querySelector('.stopwatch'), document.querySelector('.results')),
+const stopwatch = new Stopwatch(document.querySelector('.stopwatch'), document.querySelector('.results-list')),
     startButton = document.getElementById('start'),
     pauseButton = document.getElementById('pause'),
     resetButton = document.getElementById('reset');

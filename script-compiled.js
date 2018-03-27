@@ -34,12 +34,14 @@ var Stopwatch = function () {
                     return _this.step();
                 }, 10);
             }
+            startButton.className += ' running';
         }
     }, {
         key: 'pause',
         value: function pause() {
             this.running = false;
             clearInterval(this.watch);
+            startButton.classList.remove('running');
         }
     }, {
         key: 'resetButton',
@@ -117,7 +119,7 @@ function pad0(value) {
     return result;
 }
 
-var stopwatch = new Stopwatch(document.querySelector('.stopwatch'), document.querySelector('.results')),
+var stopwatch = new Stopwatch(document.querySelector('.stopwatch'), document.querySelector('.results-list')),
     startButton = document.getElementById('start'),
     pauseButton = document.getElementById('pause'),
     resetButton = document.getElementById('reset');

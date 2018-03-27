@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "babel script.js --watch --out-file script-compiled.js"
+    "start": "babel script.js --watch --out-file script-compiled.js",
+    "watch": "npm-run-all watch:*",
+    "watch:sassprefixer": "onchange sass/*.scss -- npm-run-all sassprefixer:*",
+    "sassprefixer:sass": "node-sass --output-style expanded --source-map true -o css sass",
+    "sassprefixer:autoprefixer": "autoprefixer-cli css/style.css"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +16,10 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.1",
-    "babel-preset-latest": "^6.24.1"
+    "babel-preset-latest": "^6.24.1",
+    "autoprefixer-cli": "^1.0.0",
+    "node-sass": "^4.7.2",
+    "npm-run-all": "^4.1.2",
+    "onchange": "^3.3.0"
   }
 }
