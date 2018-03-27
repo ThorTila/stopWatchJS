@@ -1,13 +1,193 @@
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Stopwatch = function () {
-    function Stopwatch(display, timesList) {
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Stopwatch = function (_React$Component) {
+    _inherits(Stopwatch, _React$Component);
+
+    function Stopwatch() {
         _classCallCheck(this, Stopwatch);
 
+        var _this = _possibleConstructorReturn(this, (Stopwatch.__proto__ || Object.getPrototypeOf(Stopwatch)).call(this));
+
+        _this.start = function () {
+            if (!_this.state.running) {
+                _this.setState({
+                    running: true
+                });
+                _this.watch = setInterval(function () {
+                    return _this.step();
+                }, 10); //zrobione
+            } else {
+                _this.reset();
+                _this.setState({
+                    running: true
+                });
+                _this.watch = setInterval(function () {
+                    return _this.step();
+                }, 10);
+            }
+            /* startButton.className += ' running';  */ // to do!!!
+        };
+
+        _this.pause = function () {
+            _this.setState({
+                running: false
+            }); //zrobione
+            clearInterval(_this.watch);
+            /* startButton.classList.remove('running'); */ //to do!!!
+        };
+
+        _this.resetButton = function () {
+            _this.reset();
+            _this.clearList(); //zrobione
+        };
+
+        _this.reset = function () {
+            if (_this.state.running) _this.pause();
+            _this.setState({
+                times: { //zrobione
+                    minutes: 0,
+                    seconds: 0,
+                    miliseconds: 0
+                }
+            });
+        };
+
+        _this.step = function () {
+            if (!_this.state.running) return; //zrobione
+            _this.calculate();
+        };
+
+        _this.calculate = function () {
+            var _this$state$times = _this.state.times,
+                minutes = _this$state$times.minutes,
+                seconds = _this$state$times.seconds,
+                miliseconds = _this$state$times.miliseconds;
+            /* this.minutes = this.state.times.minutes;
+            this.seconds = this.state.times.seconds;
+            this.miliseconds = this.state.times.miliseconds; */
+
+            miliseconds += 1;
+            if (miliseconds >= 100) {
+                seconds += 1;
+                miliseconds = 0; //zrobione
+            }
+            if (seconds >= 60) {
+                minutes += 1;
+                seconds = 0;
+            }
+            _this.setState({
+                times: {
+                    miliseconds: miliseconds,
+                    seconds: seconds,
+                    minutes: minutes
+                }
+            });
+        };
+
+        _this.render = function () {
+            return React.createElement(
+                'div',
+                { className: 'main' },
+                React.createElement(
+                    'div',
+                    { className: 'timer' },
+                    React.createElement(
+                        'nav',
+                        { className: 'controls' },
+                        React.createElement(
+                            'a',
+                            { href: '#', className: 'button', onClick: _this.start.bind(_this) },
+                            'Start'
+                        ),
+                        React.createElement(
+                            'a',
+                            { href: '#', className: 'button', onClick: _this.pause.bind(_this) },
+                            'Pause'
+                        ),
+                        React.createElement(
+                            'a',
+                            { href: '#', className: 'button', onClick: _this.resetButton.bind(_this) },
+                            'Reset'
+                        )
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'stopwatch' },
+                        _this.format(_this.state.times)
+                    )
+                ),
+                React.createElement(
+                    'div',
+                    { className: 'results' },
+                    React.createElement(
+                        'h2',
+                        null,
+                        'Times list'
+                    ),
+                    React.createElement('ul', { className: 'results-list' })
+                )
+            );
+        };
+
+        _this.printList = function () {
+            var listEl = document.createElement('li'),
+                list = '';
+            listEl.textContent = _this.loop + '. ' + _this.format(_this.times);
+            list += listEl;
+            _this.loop++;
+            return list;
+        };
+
+        _this.clearList = function () {
+            var list = document.getElementsByTagName('li');
+            while (list[0]) {
+                list[0].parentNode.removeChild(list[0]);
+            } //zrobione
+            _this.loop = 1;
+        };
+
+        _this.format = function (times) {
+            return _this.pad0(times.minutes) + ':' + _this.pad0(times.seconds) + ':' + _this.pad0(Math.floor(times.miliseconds));
+        };
+
+        _this.pad0 = function (value) {
+            var result = value.toString(); //zrobione
+            if (result.length < 2) {
+                result = '0' + result;
+            }
+            return result;
+        };
+
+        _this.state = {
+            running: false,
+            loop: 1,
+            times: {
+                minutes: 0,
+                seconds: 0,
+                miliseconds: 0
+            }
+        };
+        _this.miliseconds;
+        _this.seconds;
+        _this.minutes;
+        return _this;
+    }
+
+    return Stopwatch;
+}(React.Component);
+
+ReactDOM.render(React.createElement(Stopwatch, null), document.getElementById('app'));
+
+//stary kod
+
+/* class Stopwatch {
+    constructor(display, timesList) {
         this.running = false;
         this.display = display;
         this.timesList = timesList;
@@ -15,121 +195,84 @@ var Stopwatch = function () {
         this.print(this.times);
         this.loop = 1;
     }
-
-    _createClass(Stopwatch, [{
-        key: 'start',
-        value: function start() {
-            var _this = this;
-
-            if (!this.running) {
-                this.running = true;
-                this.watch = setInterval(function () {
-                    return _this.step();
-                }, 10);
-            } else {
-                this.printList();
-                this.reset();
-                this.running = true;
-                this.watch = setInterval(function () {
-                    return _this.step();
-                }, 10);
-            }
-            startButton.className += ' running';
-        }
-    }, {
-        key: 'pause',
-        value: function pause() {
-            this.running = false;
-            clearInterval(this.watch);
-            startButton.classList.remove('running');
-        }
-    }, {
-        key: 'resetButton',
-        value: function resetButton() {
+    start() {
+        if (!this.running) {
+            this.running = true;
+            this.watch = setInterval(() => this.step(), 10);
+        } else {
+            this.printList();
             this.reset();
-            this.clearList();
+            this.running = true;
+            this.watch = setInterval(() => this.step(), 10);
         }
-    }, {
-        key: 'reset',
-        value: function reset() {
-            if (this.running) this.pause();
-            this.times = {
-                minutes: 0,
-                seconds: 0,
-                miliseconds: 0
-            };
-            this.print();
+        startButton.className += ' running';
+    }
+    pause() {
+        this.running = false;
+        clearInterval(this.watch);
+        startButton.classList.remove('running');
+    }
+    resetButton() {
+        this.reset();
+        this.clearList();
+    }
+    reset() {
+        if (this.running) this.pause();
+        this.times = {
+            minutes: 0,
+            seconds: 0,
+            miliseconds: 0
+        };
+        this.print(); 
+    }
+    step() {
+        if (!this.running) return;
+        this.calculate();
+        this.print();
+    }
+    calculate() {
+        this.times.miliseconds += 1;
+        if (this.times.miliseconds >= 100) {
+            this.times.seconds += 1;
+            this.times.miliseconds = 0;
         }
-    }, {
-        key: 'step',
-        value: function step() {
-            if (!this.running) return;
-            this.calculate();
-            this.print();
+        if (this.times.seconds >= 60) {
+            this.times.minutes += 1;
+            this.times.seconds = 0;
         }
-    }, {
-        key: 'calculate',
-        value: function calculate() {
-            this.times.miliseconds += 1;
-            if (this.times.miliseconds >= 100) {
-                this.times.seconds += 1;
-                this.times.miliseconds = 0;
-            }
-            if (this.times.seconds >= 60) {
-                this.times.minutes += 1;
-                this.times.seconds = 0;
-            }
-        }
-    }, {
-        key: 'print',
-        value: function print() {
-            this.display.innerText = this.format(this.times);
-        }
-    }, {
-        key: 'printList',
-        value: function printList() {
-            var listEl = document.createElement('li');
-            listEl.textContent = this.loop + '. ' + this.format(this.times);
-            this.timesList.appendChild(listEl);
-            this.loop++;
-        }
-    }, {
-        key: 'clearList',
-        value: function clearList() {
-            var list = document.getElementsByTagName('li');
-            while (list[0]) {
-                list[0].parentNode.removeChild(list[0]);
-            }this.loop = 1;
-        }
-    }, {
-        key: 'format',
-        value: function format(times) {
-            return pad0(times.minutes) + ':' + pad0(times.seconds) + ':' + pad0(Math.floor(times.miliseconds));
-        }
-    }]);
-
-    return Stopwatch;
-}();
+    }
+    print() {
+        this.display.innerText = this.format(this.times);
+    }
+    printList() {
+        let listEl = document.createElement('li');
+        listEl.textContent = this.loop + '. ' + this.format(this.times);
+        this.timesList.appendChild(listEl);
+        this.loop++;
+    }
+    clearList() {
+        let list = document.getElementsByTagName('li');
+        while (list[0]) list[0].parentNode.removeChild(list[0]);
+        this.loop = 1;
+    }
+    format(times) {
+        return `${pad0(times.minutes)}:${pad0(times.seconds)}:${pad0(Math.floor(times.miliseconds))}`;
+    }
+}
 
 function pad0(value) {
-    var result = value.toString();
+    let result = value.toString();
     if (result.length < 2) {
         result = '0' + result;
     }
     return result;
-}
+} */
 
-var stopwatch = new Stopwatch(document.querySelector('.stopwatch'), document.querySelector('.results-list')),
+/* const stopwatch = new Stopwatch(document.querySelector('.stopwatch'), document.querySelector('.results-list')),
     startButton = document.getElementById('start'),
     pauseButton = document.getElementById('pause'),
-    resetButton = document.getElementById('reset');
+    resetButton = document.getElementById('reset'); */
 
-startButton.addEventListener('click', function () {
-    return stopwatch.start();
-});
-pauseButton.addEventListener('click', function () {
-    return stopwatch.pause();
-});
-resetButton.addEventListener('click', function () {
-    return stopwatch.resetButton();
-});
+/* startButton.addEventListener('click', () => stopwatch.start());
+pauseButton.addEventListener('click', () => stopwatch.pause());
+resetButton.addEventListener('click', () => stopwatch.resetButton()); */
