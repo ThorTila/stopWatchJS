@@ -178,13 +178,16 @@ var ResultsList = function (_React$Component2) {
         var _this2 = _possibleConstructorReturn(this, (ResultsList.__proto__ || Object.getPrototypeOf(ResultsList)).call(this, props));
 
         _this2.render = function () {
-            var results = _this2.props.list.map(function (el) {
-                return React.createElement(
-                    'li',
-                    { key: el.id },
-                    el.id + 1 + '. ' + el.time
-                );
-            });
+            var results = 'No times in list';
+            if (_this2.props.list.length != 0) {
+                results = _this2.props.list.map(function (el) {
+                    return React.createElement(
+                        'li',
+                        { key: el.id },
+                        el.id + 1 + '. ' + el.time
+                    );
+                });
+            }
             return React.createElement(
                 'ul',
                 { className: 'results-list' },
@@ -194,12 +197,13 @@ var ResultsList = function (_React$Component2) {
 
         return _this2;
     }
-    /* static propTypes = {
-        timesList: React.PropTypes.array.isRequired         //React.PropTypes is undefined...
-    } */
-
 
     return ResultsList;
 }(React.Component);
+
+ResultsList.propTypes = {
+    list: PropTypes.array.isRequired //React.PropTypes is undefined...
+};
+
 
 ReactDOM.render(React.createElement(Stopwatch, null), document.getElementById('app'));

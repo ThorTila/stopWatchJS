@@ -111,17 +111,20 @@ class Stopwatch extends React.Component {
 
 class ResultsList extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
     }
-    /* static propTypes = {
-        timesList: React.PropTypes.array.isRequired         //React.PropTypes is undefined...
-    } */
+    static propTypes = {
+        list: PropTypes.array.isRequired
+    }
     render = () => {
-        let results = this.props.list.map( el  => {
-             return (
-                 <li key={el.id}>{(el.id + 1) + '. ' + el.time}</li>
-             )
+        let results = 'No times in list';
+        if (this.props.list.length != 0) {
+            results = this.props.list.map( el  => {
+                return (
+                    <li key={el.id}>{(el.id + 1) + '. ' + el.time}</li>
+                )
             });
+        }
         return (
             <ul className='results-list'>{results}</ul>
         );
